@@ -67,15 +67,7 @@ class EditorViewModel {
   }
 
   handleMergeArray<S extends [], T extends []>(standardArr: S, targetArr: T) {
-    const result = [];
-
-    for (let i = 0; i < targetArr.length; i++) {
-      const targetData = this.helper.removeDuplicatesByKey(targetArr[i]);
-      const mergedArray = this.helper.mergeArrays(standardArr[i], targetData);
-      result.push(mergedArray);
-    }
-
-    return result;
+    return this._traversalListLength(standardArr, targetArr);
   }
 
   handleChangeState(newState: Partial<{ editorState: Any; customFontSize: string }>): void {
@@ -100,6 +92,17 @@ class EditorViewModel {
   private _getFoundedCoordFromSpan(textBlockElement: HTMLCollectionOf<Element> | undefined) {
     if (!this.helper.isCheckValue(textBlockElement)) return;
     return this.helper.findCoordFromSpan(textBlockElement!);
+  }
+
+  private _traversalListLength<S extends [], T extends []>(standardArr: S, targetArr: T) {
+    const result = [];
+
+    for (let i = 0; i < targetArr.length; i++) {
+      const targetData = this.helper.removeDuplicatesByKey(targetArr[i]);
+      const mergedArray = this.helper.mergeArrays(standardArr[i], targetData);
+      result.push(mergedArray);
+    }
+    return result;
   }
 }
 
