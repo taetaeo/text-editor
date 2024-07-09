@@ -7,7 +7,11 @@
   "browser": "./dist/index.umd.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run exam & npm run watch",
+    "build": "rollup -c && tsc-alias -p tsconfig.json ",
+    "watch": "rollup -cw",
+    "exam": "cd example && npm start",
+    "clean": "rm -rf node_modules & rm -rf package-lock.json & rm -rf lib & rm -rf dist"
   },
   "repository": {
     "type": "git",
