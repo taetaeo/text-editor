@@ -1,0 +1,13 @@
+# node_modules
+node_modules*
+
+example-vite/node_modules*
+example-webpack/node_modules*
+package/node_modules*
+
+
+# dist
+example-vite/dist*
+example-webpack/dist*
+package/dist*
+
