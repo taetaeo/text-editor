@@ -1,0 +1,31 @@
+{
+  "name": "text-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "text-editor",
+  "workspaces": [
+    "package/*",
+    "example-vite/*",
+    "example-webpack/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.uinetworks.kr/IntelligentSolutionTeam/text-editor.git"
+  },
+  "keywords": [
+    "text",
+    "editor",
+    "draft.js",
+    "react.js"
+  ],
+  "devDependencies": {
+    "turbo": "^1.2.6"
+  },
+  "packageManager": "yarn@1.22.17"
+}

@@ -11,3 +11,7 @@ example-vite/dist*
 example-webpack/dist*
 package/dist*
 
+.turbo
+dist
+.next
+*.tsbuildinfo
