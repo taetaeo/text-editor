@@ -23,7 +23,7 @@ export function getPlugins(extensions, pkg) {
     nodeResolve({ extensions }),
     peerDepsExternal(),
     postcss({
-      extract: "css/vms-editor.css",
+      extract: "css/text-editor.css",
       modules: false,
       sourceMap: true,
       use: ["sass"],

@@ -7,3 +7,5 @@ export * from "./viewModels";
 export * from "./views";
 export * from "./containers";
 export * from "./hooks";
+
+import "./css/index.css";
