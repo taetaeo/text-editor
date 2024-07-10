@@ -1,30 +1,36 @@
-# React + TypeScript + Vite
+# Text Editor Test in React + Vite.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Test Code.
 
-Currently, two official plugins are available:
+```tsx
+import React from "react";
+import { EditorContainer, ToolbarContainer, useEditor, textEditorConfig } from "text-editor";
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+import "text-editor/dist/css/text-editor.css";
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+function App() {
+  const { editorRef, editorState, editorModel, onChange, toggleBlockType, toggleInlineStyle, handleKeyCommand, keyBindingFn } = useEditor();
+  return (
+    <>
+      <ToolbarContainer toggleInlineStyle={toggleInlineStyle} toggleBlockType={toggleBlockType} />
+      <EditorContainer
+        ref={editorRef}
+        editorState={editorState}
+        onChange={onChange}
+        handleKeyCommand={handleKeyCommand}
+        keyBindingFn={keyBindingFn}
+        blockStyleFn={editorModel.handleBlockStyleFn}
+        customStyleMap={textEditorConfig.styleMap}
+        placeholder={"내용을 입력해주세요......"}
+      />
+    </>
+  );
 }
+
+export default App;
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. EditorContainer : Text Editor의 기능을 담당하는 컴포넌트
+2. ToolbarContainer : Toolbar의 기능을 담당하는 컴포넌트
+3. useEditor : Editor의 데이터 로직을 담당하는 훅
+4. style : `text-editor/dist/css/text-editor.css` 경로를 통해서 css 파일 import
