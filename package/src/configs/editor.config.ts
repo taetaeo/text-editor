@@ -28,7 +28,8 @@ const customStyleMap = {
   GREEN: { color: "green" },
   SIZE_12: { fontSize: "12px" },
   SIZE_16: { fontSize: "16px" },
-  SIZE_20: { fontSize: "20px" },
+  SIZE_24: { fontSize: "24px" },
+  SIZE_32: { fontSize: "32px" },
 };
 
 const toolbarLabel = {

@@ -82,18 +82,11 @@ class EditorModel {
     return (this.editorState = RichUtils.toggleBlockType(this._state.editorState, blockType));
   }
 
+  /**
+   * 블록(Block) 스타일 - 정렬
+   */
   onBlockStyleFn(contentBlock: ContentBlock): string {
-    const type = contentBlock.getType();
-    switch (type) {
-      case "left":
-        return "text-align-left";
-      case "center":
-        return "text-align-center";
-      case "right":
-        return "text-align-right";
-      default:
-        return "";
-    }
+    return this.helper.pickBlockStyle(contentBlock.getType() as "left" | "center" | "right" | "justify" | "");
   }
 
   onExtractObjectFromRTE() {

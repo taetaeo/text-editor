@@ -5,8 +5,6 @@ import "text-editor/dist/css/text-editor.css";
 function App() {
   const { editorRef, editorState, editorModel, onChange, toggleBlockType, toggleInlineStyle, handleKeyCommand, keyBindingFn } = useEditor();
 
-  console.log(textEditorConfig);
-
   return (
     <>
       <ToolbarContainer
