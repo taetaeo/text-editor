@@ -4,7 +4,7 @@ export * from "./models";
 export * from "./types";
 export * from "./models";
 export * from "./viewModels";
-export * from "./views";
+// export * from "./views";s
 export * from "./containers";
 export * from "./hooks";
 
