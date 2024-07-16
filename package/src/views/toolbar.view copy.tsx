@@ -22,7 +22,7 @@ interface Props {
   label?: ButtonLabel;
 }
 
-const ToolbarContainer: React.FC<React.PropsWithChildren<Props>> = ({ toggleInlineStyle, toggleBlockType, label = {} }) => {
+const ToolbarView: React.FC<React.PropsWithChildren<Props>> = ({ toggleInlineStyle, toggleBlockType, label = {} }) => {
   return (
     <div className="text-Editor-toolbar">
       <div className="text-Editor-toolbar-flex">
@@ -76,4 +76,4 @@ const ToolbarContainer: React.FC<React.PropsWithChildren<Props>> = ({ toggleInli
   );
 };
 
-export default ToolbarContainer;
+export default ToolbarView;

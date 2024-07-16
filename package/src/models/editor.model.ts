@@ -1,5 +1,5 @@
-import type { DraftInlineStyle, DraftBlockType, DraftEditorCommand, ContentBlock } from "draft-js";
-import { convertToRaw, EditorState, getDefaultKeyBinding, RichUtils } from "draft-js";
+import type { DraftStyleMap, DraftInlineStyle, DraftBlockType, DraftEditorCommand, ContentBlock, ContentState, SelectionState } from "draft-js";
+import { convertToRaw, EditorState, getDefaultKeyBinding, Modifier, RichUtils } from "draft-js";
 import * as React from "react";
 
 import type { ReStructInLineStyleType, OriginInLineStyleType, Any } from "../types";
@@ -7,7 +7,7 @@ import { ModelHelper } from "../lib";
 
 interface EditorModelState {
   editorState: EditorState;
-  customFontSize?: string;
+  styleMap: DraftStyleMap;
 }
 
 class EditorModel {
@@ -18,6 +18,7 @@ class EditorModel {
     this._helper = new ModelHelper();
     this._state = {
       editorState: EditorState.createEmpty(),
+      styleMap: {},
     };
   }
   private get helper() {
@@ -30,6 +31,14 @@ class EditorModel {
 
   set editorState(editorState: EditorState) {
     this._state.editorState = editorState;
+  }
+
+  get styleMap(): DraftStyleMap {
+    return this._state.styleMap;
+  }
+
+  set styleMap(styleMap: DraftStyleMap) {
+    this._state.styleMap = styleMap;
   }
 
   /**
@@ -56,14 +65,6 @@ class EditorModel {
       return null;
     }
 
-    // if (e.key === "Enter") {
-    //   const newStateFromKeyCommand = RichUtils.insertSoftNewline(this._state.editorState);
-    //   if (newStateFromKeyCommand) {
-    //     this.editorState = newStateFromKeyCommand;
-    //     return "split-block";
-    //   }
-    // }
-
     return getDefaultKeyBinding(e);
   }
 
@@ -71,7 +72,8 @@ class EditorModel {
    * 인라인(inline) 스타일 적용
    */
 
-  onToggleInlineStyle(inlineStyle: DraftInlineStyle) {
+  onToggleInlineStyle(inlineStyle: DraftInlineStyle | string) {
+    console.log("inlineStyle", inlineStyle);
     return (this.editorState = RichUtils.toggleInlineStyle(this._state.editorState, inlineStyle as unknown as string));
   }
 
@@ -82,9 +84,6 @@ class EditorModel {
     return (this.editorState = RichUtils.toggleBlockType(this._state.editorState, blockType));
   }
 
-  /**
-   * 블록(Block) 스타일 - 정렬
-   */
   onBlockStyleFn(contentBlock: ContentBlock): string {
     return this.helper.pickBlockStyle(contentBlock.getType() as "left" | "center" | "right" | "justify" | "");
   }
@@ -128,18 +127,78 @@ class EditorModel {
     return result;
   }
 
+  onChangeFontSize(fontSize: string) {
+    const currentContent = this.editorState.getCurrentContent();
+    const selection = this.editorState.getSelection();
+
+    const contentWithoutOldStyles = Object.keys(this.styleMap!)
+      .filter((key) => key.startsWith("FONT_SIZE"))
+      .reduce((contentState, key) => Modifier.removeInlineStyle(contentState, selection, key), currentContent);
+
+    // 선택한 범위의 텍스트 크기 스타일 업데이트
+    const contentWithNewStyle = Modifier.applyInlineStyle(contentWithoutOldStyles, selection, fontSize);
+
+    // 업데이트된 컨텐츠로 새로운 EditorState 생성
+    const newEditorState = EditorState.push(this.editorState, contentWithNewStyle, "change-inline-style");
+
+    // Model의 instance 중 editorState를 업데이트
+    this.editorState = newEditorState;
+  }
+
+  onChangeFontColor(fontColor: string) {
+    const currentContent = this.editorState.getCurrentContent();
+    const selection = this.editorState.getSelection();
+
+    // 색상 스타일을 적용하기 전에 기존 색상 스타일을 제거합니다.
+    const nextContentState = Object.keys(this.styleMap!)
+      .filter((key) => key.startsWith("FONT_COLOR"))
+      .reduce((content, colorKey) => {
+        return Modifier.removeInlineStyle(content, selection, colorKey);
+      }, currentContent);
+
+    // 새로운 스타일 적용
+    const colorStyle = `FONT_COLOR_${this.helper.convertColorToUpperCase(fontColor) || ""}`;
+
+    // 스타일 맵에 색상 스타일 추가
+    if (!this.styleMap![colorStyle]) {
+      this.styleMap![colorStyle] = { color: `${fontColor}` };
+    }
+
+    // 선택한 범위의 텍스트 색상 스타일 업데이트
+    const contentWithNewStyle = Modifier.applyInlineStyle(nextContentState, selection, colorStyle);
+
+    // 업데이트된 콘텐츠로 새 EditorState로 생성
+    const newEditorState = EditorState.push(this.editorState, contentWithNewStyle, "change-inline-style");
+
+    // Model의 instance 중 editorState를 업데이트
+    this.editorState = newEditorState;
+
+    return this.editorState;
+  }
+
+  /** Set State  */
   setState(newState: Partial<EditorModelState>): void {
     this._state = { ...this._state, ...newState };
   }
 
+  /**
+   * ==============================================================================================
+   *                                          PRIVATE
+   * ==============================================================================================
+   */
   private _convertToRaw() {
     return convertToRaw(this._state.editorState.getCurrentContent());
   }
 
   private _restructureInlineStyle(inlineArray: []) {
-    return inlineArray?.map(({ offset, length, style }: OriginInLineStyleType) => {
-      return { start: offset, end: offset + length, style };
-    });
+    return inlineArray?.map(({ offset, length, style }: OriginInLineStyleType) => ({ start: offset, end: offset + length, style }));
+  }
+
+  private _deletePrevStyle(currentContent: ContentState, selection: SelectionState, targetStyle: string): ContentState | null {
+    if (!currentContent && !selection && !targetStyle) return null;
+    return Object.keys(this.styleMap!)
+      .filter((key) => key.startsWith(targetStyle))
+      .reduce((content, colorKey) => Modifier.removeInlineStyle(content, selection, colorKey), currentContent);
   }
 }
 export default EditorModel;

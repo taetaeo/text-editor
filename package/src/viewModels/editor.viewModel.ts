@@ -1,4 +1,4 @@
-import type { DraftInlineStyle, DraftBlockType, DraftEditorCommand, ContentBlock, EditorState, Editor } from "draft-js";
+import type { DraftStyleMap, DraftInlineStyle, DraftBlockType, DraftEditorCommand, ContentBlock, EditorState, Editor } from "draft-js";
 import type { RefObject } from "react";
 import * as React from "react";
 
@@ -17,6 +17,7 @@ class EditorViewModel {
     this._helper = new ViewModelHelper();
     this.editorRef = editorRef;
 
+    this.handleChangeState = this.handleChangeState.bind(this);
     this.handleBlockStyleFn = this.handleBlockStyleFn.bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.handleMappingKeyToCommand = this.handleMappingKeyToCommand.bind(this);
@@ -24,13 +25,20 @@ class EditorViewModel {
     this.handleToggleBlockType = this.handleToggleBlockType.bind(this);
     this.handleFocusEditor = this.handleFocusEditor.bind(this);
     this.handleMergeArray = this.handleMergeArray.bind(this);
+    this.handleChangeFontSize = this.handleChangeFontSize.bind(this);
+    this.handleChangeFontColor = this.handleChangeFontColor.bind(this);
+  }
+
+  get helper() {
+    return this._helper;
   }
 
   get editorState() {
     return this.editorModel.editorState;
   }
-  get helper() {
-    return this._helper;
+
+  get customStyleMap() {
+    return this.editorModel.styleMap;
   }
 
   handleFocusEditor(): void {
@@ -70,14 +78,28 @@ class EditorViewModel {
     return this._traversalListLength(standardArr, targetArr);
   }
 
-  handleChangeState(newState: Partial<{ editorState: Any; customFontSize: string }>): void {
-    if (newState.editorState !== undefined) {
-      this.editorModel.editorState = newState.editorState;
-    }
-    // if (newState.customFontSize !== undefined) {
-    //   this.model.customFontSize = newState.customFontSize;
-    // }
+  handleChangeFontSize(fontSize: string) {
+    return this.editorModel.onChangeFontSize(fontSize);
   }
+
+  handleChangeFontColor(fontColor: string) {
+    return this.editorModel.onChangeFontColor(fontColor);
+  }
+
+  handleChangeState(newState: Partial<{ editorState: Any; styleMap: DraftStyleMap }>): void {
+    if (newState.editorState !== undefined) {
+      this.editorModel.setState({ editorState: newState.editorState });
+    }
+    if (newState.styleMap !== undefined) {
+      this.editorModel.setState({ styleMap: newState.styleMap });
+    }
+  }
+
+  /**
+   * ==============================================================================================
+   *                                          PRIVATE
+   * ==============================================================================================
+   */
 
   private _getEditorContainer() {
     if (!this.helper.isCheckRef(this.editorRef)) return;

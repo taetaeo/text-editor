@@ -1,7 +1,9 @@
-import { EditorViewModel } from "@/viewModels";
 import type { Editor, DraftBlockType } from "draft-js";
 import { EditorState, DraftInlineStyle, DraftEditorCommand, getDefaultKeyBinding } from "draft-js";
 import * as React from "react";
+
+import type { CustomStyleMapType } from "../types";
+import { EditorViewModel } from "../viewModels";
 
 export default function useEditor() {
   const editorRef = React.useRef<Editor>(null);
@@ -44,20 +46,38 @@ export default function useEditor() {
     const command = editorViewModel.handleMappingKeyToCommand(e);
     if (command) {
       setEditorState(editorViewModel.editorModel.editorState);
-      console.log("COMMAND", command);
     }
     return getDefaultKeyBinding(e);
   };
 
+  const handleChangeFontSize = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    editorViewModel.handleChangeFontSize(e.target.value);
+    setEditorState(editorViewModel.editorState);
+  };
+
+  const handleChangeFontColor = (color: string) => {
+    editorViewModel.handleChangeFontColor(color);
+    setEditorState(() => editorViewModel.handleChangeFontColor(color)!);
+  };
+
   return {
+    // Ref
     editorRef,
+    // State
     editorState,
+    setEditorState,
+
+    // ViewModel
     editorModel: editorViewModel,
 
+    // Event
     onChange,
     toggleBlockType,
     toggleInlineStyle,
     handleKeyCommand,
     keyBindingFn,
+
+    handleChangeFontSize,
+    handleChangeFontColor,
   };
 }

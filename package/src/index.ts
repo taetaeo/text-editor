@@ -4,8 +4,8 @@ export * from "./models";
 export * from "./types";
 export * from "./models";
 export * from "./viewModels";
-// export * from "./views";s
-export * from "./containers";
+export * from "./views";
+export * from "./components";
 export * from "./hooks";
 
 import "./css/index.css";

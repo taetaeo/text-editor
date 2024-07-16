@@ -13,9 +13,8 @@ interface Props {
   placeholder?: string;
 }
 
-const EditorContainer = React.forwardRef<Editor, Props>(function RTEditor(
+const EditorView = React.forwardRef<Editor, Props>(function RTEditor(
   {
-    //
     editorState,
     onChange = () => {},
     onFocus = () => {},
@@ -42,4 +41,4 @@ const EditorContainer = React.forwardRef<Editor, Props>(function RTEditor(
     </div>
   );
 });
-export default EditorContainer;
+export default EditorView;

@@ -1,9 +1,15 @@
-import { Coord } from "./coord";
-import { Direction } from "./direction";
-import { OffsetLength } from "./offset";
-import { Point } from "./point";
-import { Size } from "./size";
-import { Style, Styles } from "./style";
+import type { DraftStyleMap } from "draft-js";
+import type { Coord } from "./coord.type";
+import type { Direction } from "./direction.type";
+import type { FontCSSType } from "./fonts.type";
+import type { OffsetLength } from "./offset.type";
+import type { Point } from "./point.type";
+import type { Size } from "./size.type";
+import type { Style, Styles } from "./style.type";
+import type { KeyAbleType, NameType } from "./helper.type";
+import type { ButtonGroupDataType, ButtonGroupListType, toggleBlockType, ToggleInlineStyleType } from "./button.type";
+import type { SelectOptionListType, SelectOptionType } from "./select.type";
+import type { ToolbarConfigObjectListType, ToolbarConfigObjectType } from "./object";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Any = any;
@@ -15,3 +21,27 @@ export type ReStructInLineStyleType = Point & Style;
 export type ReStructInLineStylesType = Point & Styles;
 
 export type ElementRectType = Direction & Size & Coord;
+
+export type StyleMapOptionType = FontCSSType;
+
+export type CustomStyleMapType = DraftStyleMap;
+
+export type KeyAble = KeyAbleType;
+
+export type Name = NameType;
+
+export type ButtonGroupData = ButtonGroupDataType;
+
+export type ButtonGroupList = ButtonGroupListType;
+
+export type ToggleInlineStyle = ToggleInlineStyleType;
+
+export type ToggleBlockType = toggleBlockType;
+
+export type SelectOption = SelectOptionType;
+
+export type SelectOptionList = SelectOptionListType;
+
+export type ToolbarConfigObject = ToolbarConfigObjectType;
+
+export type ToolbarConfigObjectList = ToolbarConfigObjectListType;

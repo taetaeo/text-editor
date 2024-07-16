@@ -1,53 +1,118 @@
-import { EditorContainer, ToolbarContainer, useEditor, textEditorConfig } from "text-editor";
+import type { CustomStyleMapType } from "text-editor";
+import { ToolbarView, EditorView, useEditor, styledMap, toolbarConfigs, ExtractObjectButton, useColorPicker, ColorPicker } from "text-editor";
+import * as R from "react";
 
 import "text-editor/dist/css/text-editor.css";
 
+const { select, button } = toolbarConfigs;
+
+const styleMapList = [...select.fontColors, ...select.fontFamily, ...select.fontSizes, ...select.fontStyle];
+
+console.log(
+  `
+          ============= Default Style Map =============
+          `,
+  styleMapList
+);
+
 function App() {
-  const { editorRef, editorState, editorModel, onChange, toggleBlockType, toggleInlineStyle, handleKeyCommand, keyBindingFn } = useEditor();
+  const [extractState, setExtractState] = R.useState({});
+  const [customStyleMap, setCustomStyleMap] = R.useState<CustomStyleMapType>(() => styledMap(styleMapList));
+
+  const {
+    editorRef,
+    editorState,
+    editorModel,
+    onChange,
+    toggleBlockType,
+    toggleInlineStyle,
+    handleKeyCommand,
+    keyBindingFn,
+    handleChangeFontSize,
+    handleChangeFontColor,
+  } = useEditor();
+  const { ref: colorPickerRef, currentColor, onChangeColor, isActive, toggle, onActive, onInactive } = useColorPicker({ initialColor: "#ffffff" });
+
+  const onChangeFontColor = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    const targetColor = e.target.value;
+
+    if (!targetColor) {
+      return onActive();
+    }
+    const fontColor = `FONT_COLOR_${targetColor}`;
+    toggleInlineStyle(fontColor);
+    onInactive();
+  };
+
+  const _onCallbackFontColor = (color: string) => {
+    handleChangeFontColor(color);
+    setCustomStyleMap((prev: CustomStyleMapType) => ({ ...prev, ...editorModel.editorModel.styleMap }));
+  };
+
+  R.useEffect(() => {
+    console.log("데이터 추출", extractState);
+  }, [extractState]);
+
+  console.log("customStyleMap", select.fontColors);
 
   return (
-    <>
-      <ToolbarContainer
-        toggleInlineStyle={toggleInlineStyle}
-        toggleBlockType={toggleBlockType}
-        label={{
-          bold: textEditorConfig.toolbarLabel?.text?.bold || "굵기",
-          italic: textEditorConfig.toolbarLabel?.text?.italic || "기울림",
-          underline: textEditorConfig.toolbarLabel?.text?.underline || "밑줄",
-          "align-center": textEditorConfig.toolbarLabel.align.center || "중앙정렬",
-          "align-left": textEditorConfig.toolbarLabel.align.left || "왼쪽 정렬",
-          "align-right": textEditorConfig.toolbarLabel.align.right || "오른쪽 정렬",
-          "align-justify": textEditorConfig.toolbarLabel.align.justify || "양쪽 정렬",
-          color: textEditorConfig.toolbarLabel.color,
-          "list-bullet": textEditorConfig.toolbarLabel.list.bullet,
-          "list-number": textEditorConfig.toolbarLabel.list.number,
-        }}
-      />
-      <button
-        onClick={() => {
-          const objectFromRte = editorModel.handleExtractObjectFromRTE();
-          console.log("objectFromRte", objectFromRte);
+    <R.Fragment>
+      <ToolbarView>
+        {/* 글꼴 형태 Start*/}
+        {/* <ToolbarView.FontFamilySelector fontFamilyList={select.fontFamily} /> */}
+        {/* 글꼴 형태 End*/}
 
-          const extractedCoord = editorModel.handleExtractCoord();
-          console.log("extractedCoord", extractedCoord);
+        {/* 글자 정렬 Start */}
+        <ToolbarView.FontAlignButtonGroup fontAlignList={button.fontAlign} toggleBlockType={toggleBlockType} />
+        {/* <ToolbarView.FontAlignSelector fontAlignList={select.} /> */}
+        {/* 글자 정렬 End */}
 
-          const mergedList = editorModel.handleMergeArray<any, any>(objectFromRte, extractedCoord);
-          console.log("mergedList", mergedList);
-        }}
-      >
+        {/* 글자 스타일 Start */}
+        <ToolbarView.FontStyleButtonGroup fontStyleList={button.fontStyle} toggleInlineStyle={toggleInlineStyle} />
+
+        {/* 글자 스타일 End */}
+
+        {/* 글자 색상 Start */}
+        <ToolbarView.FontColorButtonGroup fontColorList={button.fontColor} toggleInlineStyle={toggleInlineStyle} />
+        <ToolbarView.FontColorSelector
+          fontColorList={[...select.fontColors, { label: "", style: "", type: "fontColor", value: "더보기" }]}
+          onChange={onChangeFontColor}
+        />
+
+        {/* 글자 색상 End*/}
+
+        {/* 글자 사이즈 Start */}
+        <ToolbarView.FontSizeButtonGroup fontSizeList={button.fontSize} toggleInlineStyle={toggleInlineStyle} />
+        <ToolbarView.FontSizeSelector
+          fontSizeList={[...select.fontSizes, { label: "", style: "", type: "fontSize", value: "직접입력" }]}
+          onChange={handleChangeFontSize}
+        />
+        {/* 글자 사이즈 End */}
+      </ToolbarView>
+
+      {isActive && (
+        <div>
+          <span className="color-picker_wrapper" ref={colorPickerRef}>
+            <ColorPicker type="chrome" initialColor={currentColor} onColorChange={onChangeColor} onCallbackFontColor={_onCallbackFontColor} />
+          </span>
+        </div>
+      )}
+
+      <ExtractObjectButton editorViewModel={editorModel} setState={setExtractState}>
         데이터 추출하기
-      </button>
-      <EditorContainer
+      </ExtractObjectButton>
+
+      <EditorView
         ref={editorRef}
         editorState={editorState}
         onChange={onChange}
         handleKeyCommand={handleKeyCommand}
         keyBindingFn={keyBindingFn}
         blockStyleFn={editorModel.handleBlockStyleFn}
-        customStyleMap={textEditorConfig.customStyleMap}
+        customStyleMap={customStyleMap}
         placeholder={"내용을 입력해주세요......"}
       />
-    </>
+    </R.Fragment>
   );
 }
 

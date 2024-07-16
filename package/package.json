@@ -38,6 +38,7 @@
     "@types/draft-js": "^0.11.18",
     "@types/fabric": "^5.3.7",
     "@types/react": "^18.3.1",
+    "@types/react-color": "^3.0.12",
     "autoprefixer": "^10.4.19",
     "node-sass": "^9.0.0",
     "postcss": "^8.4.38",
@@ -55,7 +56,8 @@
   },
   "peerDependencies": {
     "draft-js": "^0.11.7",
-    "react": "^18.3.1"
+    "react": "^18.3.1",
+    "react-color": "^2.19.3"
   },
   "dependencies": {}
 }
