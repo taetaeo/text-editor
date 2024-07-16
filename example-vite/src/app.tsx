@@ -49,12 +49,6 @@ function App() {
     setCustomStyleMap((prev: CustomStyleMapType) => ({ ...prev, ...editorModel.editorModel.styleMap }));
   };
 
-  R.useEffect(() => {
-    console.log("데이터 추출", extractState);
-  }, [extractState]);
-
-  console.log("customStyleMap", select.fontColors);
-
   return (
     <R.Fragment>
       <ToolbarView>
