@@ -33,7 +33,7 @@ function App() {
   } = useEditor();
   const { ref: colorPickerRef, currentColor, onChangeColor, isActive, toggle, onActive, onInactive } = useColorPicker({ initialColor: "#ffffff" });
 
-  const onChangeFontColor = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const onChangeFontColor = (e: R.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const targetColor = e.target.value;
 
     if (!targetColor) {

@@ -2,7 +2,6 @@ import type { Editor, DraftBlockType } from "draft-js";
 import { EditorState, DraftInlineStyle, DraftEditorCommand, getDefaultKeyBinding } from "draft-js";
 import * as React from "react";
 
-import type { CustomStyleMapType } from "../types";
 import { EditorViewModel } from "../viewModels";
 
 export default function useEditor() {
@@ -50,12 +49,12 @@ export default function useEditor() {
     return getDefaultKeyBinding(e);
   };
 
-  const handleChangeFontSize = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const onChangeFontSize = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     editorViewModel.handleChangeFontSize(e.target.value);
     setEditorState(editorViewModel.editorState);
   };
 
-  const handleChangeFontColor = (color: string) => {
+  const onChangeFontColor = (color: string) => {
     editorViewModel.handleChangeFontColor(color);
     setEditorState(() => editorViewModel.handleChangeFontColor(color)!);
   };
@@ -77,7 +76,9 @@ export default function useEditor() {
     handleKeyCommand,
     keyBindingFn,
 
-    handleChangeFontSize,
-    handleChangeFontColor,
+    changeHandler: {
+      onChangeFontSize,
+      onChangeFontColor,
+    },
   };
 }
