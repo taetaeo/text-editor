@@ -24,7 +24,7 @@ import { textStyleFn } from "./_helper";
 export default function styledMap(styleMapConfig: SelectOptionList): CustomStyleMapType {
   return styleMapConfig.reduce<CustomStyleMapType>((map, option) => {
     let key: string;
-    let value: { [key in "fontFamily" | "fontSize" | "fontWeight" | "fontColor" | "fontStyle" | string]: string };
+    let value: { [key in "fontFamily" | "fontSize" | "fontWeight" | "fontColor" | "fontStyle" | "fontAlign" | string]: string };
 
     // Font Family Option
     if ("fontFamily" === option.type) {
@@ -40,9 +40,16 @@ export default function styledMap(styleMapConfig: SelectOptionList): CustomStyle
     else if ("fontSize" === option.type) {
       key = `FONT_SIZE_${option.style?.replace("px", "")}`;
       value = { fontSize: option.value! };
-    } else if ("fontStyle" === option.type) {
+    }
+    // Font Style Option
+    else if ("fontStyle" === option.type) {
       key = `FONT_STYLE_${option.style?.toUpperCase()}`;
       value = textStyleFn(option.style as "bold" | "italic" | "underline")! as unknown as { [key in string]: string };
+    }
+    // Font Align Option
+    else if (option.type === "fontAlign") {
+      key = `FONT_ALIGN_${option.style?.toUpperCase()}`;
+      value = { textAlign: option.value };
     }
     // None
     else {

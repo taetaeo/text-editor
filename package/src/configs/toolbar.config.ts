@@ -1,5 +1,11 @@
 import { ButtonGroupList, SelectOptionList } from "../types";
 
+const selectFontAligns: SelectOptionList = [
+  { type: "fontAligns", label: "FONT_ALIGN_LEFT", style: "left", value: "left" },
+  { type: "fontAligns", label: "FONT_ALIGN_RIGHT", style: "right", value: "right" },
+  { type: "fontAligns", label: "FONT_ALIGN_CENTER", style: "center", value: "center" },
+];
+
 const selectFontStyles: SelectOptionList = [
   { type: "fontStyle", label: "FONT_STYLE_UNDERLINE", style: "underline", value: "underline" },
   { type: "fontStyle", label: "FONT_STYLE_ITALIC", style: "italic", value: "italic" },
@@ -108,10 +114,11 @@ const buttonGroupFontStyles: ButtonGroupList = [
 
 export default {
   select: {
-    fontFamily: selectFontFamilies,
+    fontFamilies: selectFontFamilies,
     fontColors: selectFontColors,
     fontSizes: selectFontSizes,
-    fontStyle: selectFontStyles,
+    fontStyles: selectFontStyles,
+    fontAligns: selectFontAligns,
   },
   button: {
     fontAlign: buttonGroupFontAligns,

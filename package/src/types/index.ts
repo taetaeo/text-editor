@@ -10,6 +10,7 @@ import type { KeyAbleType, NameType } from "./helper.type";
 import type { ButtonGroupDataType, ButtonGroupListType, toggleBlockType, ToggleInlineStyleType } from "./button.type";
 import type { SelectOptionListType, SelectOptionType } from "./select.type";
 import type { ToolbarConfigObjectListType, ToolbarConfigObjectType } from "./object";
+import { AlignType, FontAlignType } from "./align.type";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Any = any;
@@ -45,3 +46,7 @@ export type SelectOptionList = SelectOptionListType;
 export type ToolbarConfigObject = ToolbarConfigObjectType;
 
 export type ToolbarConfigObjectList = ToolbarConfigObjectListType;
+
+export type Align = AlignType;
+
+export type FontAlign = FontAlignType;

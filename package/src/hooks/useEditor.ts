@@ -82,3 +82,17 @@ export default function useEditor() {
     },
   };
 }
+/**
+ * 명조체
+고딕체
+굴림체
+바탕체
+돋움체
+궁서체
+한길체
+나눔고딕 Light
+나눔고딕
+나눔고딕 Bold
+나눔고딕 Extra Bold
+
+ */

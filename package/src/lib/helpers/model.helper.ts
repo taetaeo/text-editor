@@ -1,4 +1,4 @@
-import { ReStructInLineStylesType } from "../../types";
+import { FontAlign, ReStructInLineStylesType } from "../../types";
 
 class ModelHelper {
   /**
@@ -51,8 +51,10 @@ class ModelHelper {
    * @param {"left" | "center" | "right" | "justify" | ""} type
    * @returns {"left" | "center" | "right" | "justify" | ""}
    */
-  public pickBlockStyle(type: "left" | "center" | "right" | "justify" | "") {
+
+  public pickBlockStyle(type: FontAlign | "") {
     switch (type) {
+      // Default
       case "left":
         return "text-align-left";
       case "center":
@@ -60,6 +62,15 @@ class ModelHelper {
       case "right":
         return "text-align-right";
       case "justify":
+        return "text-align-justify";
+      // Custom
+      case "FONT_ALIGN_LEFT":
+        return "text-align-left";
+      case "FONT_ALIGN_RIGHT":
+        return "text-align-right";
+      case "FONT_ALIGN_CENTER":
+        return "text-align-center";
+      case "FONT_ALIGN_JUSTIFY":
         return "text-align-justify";
       default:
         return "";
